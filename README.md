@@ -5,9 +5,9 @@ feature
 
 - standalone from golang tools repo.
 - cut off heading & footer from tmpl.
+- change root path to '/slides'. (It looks complicated to handle 'X-Forwarded-Prefix' in tmpl files.)
 
 todo
 ====
 
-+ change listening path from '/' to another specific path, or support (ie. automatically add) 'X-Forwarded-Prefix' header in response.
 + support .md files.
