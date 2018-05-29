@@ -42,7 +42,7 @@
   <h4>Articles:</h4>
   <dl>
   {{range .}}
-  <dd><a href="/{{.Path}}">{{.Name}}</a>: {{.Title}}</dd>
+  <dd><a href="/slides/{{.Path}}">{{.Name}}</a>: {{.Title}}</dd>
   {{end}}
   </dl>
   {{end}}
@@ -51,7 +51,7 @@
   <h4>Slide decks:</h4>
   <dl>
   {{range .}}
-  <dd><a href="/{{.Path}}">{{.Name}}</a>: {{.Title}}</dd>
+  <dd><a href="/slides/{{.Path}}">{{.Name}}</a>: {{.Title}}</dd>
   {{end}}
   </dl>
   {{end}}
@@ -60,7 +60,7 @@
   <h4>Files:</h4>
   <dl>
   {{range .}}
-  <dd><a href="/{{.Path}}">{{.Name}}</a></dd>
+  <dd><a href="/slides/{{.Path}}">{{.Name}}</a></dd>
   {{end}}
   </dl>
   {{end}}
@@ -69,7 +69,7 @@
   <h4>Sub-directories:</h4>
   <dl>
   {{range .}}
-  <dd><a href="/{{.Path}}">{{.Name}}</a></dd>
+  <dd><a href="/slides/{{.Path}}">{{.Name}}</a></dd>
   {{end}}
   </dl>
   {{end}}
