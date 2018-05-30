@@ -7,6 +7,7 @@ package main
 import (
 	"html/template"
 	"io"
+	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
@@ -15,6 +16,9 @@ import (
 	"sort"
 
 	"github.com/xiaohaili/present/present"
+
+	md "github.com/gomarkdown/markdown"
+	mdparser "github.com/gomarkdown/markdown/parser"
 )
 
 func init() {
@@ -29,6 +33,14 @@ func dirHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	const base = "."
 	name := filepath.Join(base, r.URL.Path)
+	if isMD(name) {
+		err := renderMDDoc(w, name)
+		if err != nil {
+			log.Println(err)
+			http.Error(w, err.Error(), 500)
+		}
+		return
+	}
 	if isDoc(name) {
 		err := renderDoc(w, name)
 		if err != nil {
@@ -54,6 +66,10 @@ func dirHandler(w http.ResponseWriter, r *http.Request) {
 func isDoc(path string) bool {
 	_, ok := contentTemplate[filepath.Ext(path)]
 	return ok
+}
+
+func isMD(path string) bool {
+	return filepath.Ext(path) == ".md"
 }
 
 var (
@@ -88,6 +104,30 @@ func initTemplates(base string) error {
 
 	var err error
 	dirListTemplate, err = template.ParseFiles(filepath.Join(base, "templates/dir.tmpl"))
+	return err
+}
+
+// renderMDDoc reads the MD file, convert to html, send output to w.
+func renderMDDoc(w io.Writer, docFile string) error {
+	input, err := ioutil.ReadFile(docFile)
+	if err != nil {
+		return err
+	}
+
+	var output []byte
+	var extensions = mdparser.NoIntraEmphasis |
+		mdparser.Tables |
+		mdparser.FencedCode |
+		mdparser.Autolink |
+		mdparser.Strikethrough |
+		mdparser.SpaceHeadings
+	var renderer md.Renderer
+
+	parser := mdparser.NewWithExtensions(extensions)
+	output = md.ToHTML(input, parser, renderer)
+	// _, err = os.Stdout.Write(output)
+	_, err = w.Write(output)
+
 	return err
 }
 
@@ -184,6 +224,7 @@ func showFile(n string) bool {
 	case ".pdf":
 	case ".html":
 	case ".go":
+	case ".md":
 	default:
 		return isDoc(n)
 	}
