@@ -1,5 +1,7 @@
 # present
 
+[![Build Status](https://travis-ci.org/xiaohaili/present.svg?branch=master)](https://travis-ci.org/xiaohaili/present)
+
 This is a fork from golang [present](https://godoc.org/golang.org/x/tools/present) tool.
 
 # feature
